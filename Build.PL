@@ -126,13 +126,22 @@ EOC
 
 my $class = Module::Build->subclass(class => 'App::Textcast', code => $code) ;
 
+my @prerequisits ;
+if($^O ne 'MSWin32')
+	{
+	push @prerequisits, 'Term::Size', 0.2 ;
+	}
+else
+	{
+	push @prerequisits, 'Win32::Console',  0 ;
+	}
+
 my $build = $class->new
 	(
 	module_name => 'App::Textcast',
-	
 	dist_version => GetVersionAndRevisionFrom('lib/App/Textcast.pm'),
-	
 	license => 'perl',
+	
 	build_requires => 
 		{
 		'Text::Diff' => 0,
@@ -141,10 +150,19 @@ my $build = $class->new
 		'Test::NoWarnings' => 0,
 		'Test::Warn' => 0,
 		},
+		
 	requires => 
 		{
-		'Readonly'         => 0,
-		'Sub::Exporter'     => 0,
+		'Readonly' => 0,
+		'Sub::Exporter' => 0,
+		'Term::VT102' => 0,
+		'IO::Handle' => 0,
+		'POSIX' => 0,
+		'IO::Pty' => 0,
+		'File::Slurp' => 0,
+		'Time::HiRes' => 0,
+		'Getopt::Long' => 0,
+		@prerequisits,
 		},
 		
 	pm_files     => \%all_modules,

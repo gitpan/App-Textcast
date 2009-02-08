@@ -18,7 +18,7 @@ use Sub::Exporter -setup =>
 	};
 	
 use vars qw ($VERSION);
-$VERSION     = '0.01_01';
+$VERSION     = '0.02_01';
 }
 
 #-------------------------------------------------------------------------------
@@ -64,6 +64,70 @@ why textcasts?
 	that displays help. I also believe that it could be used as a complement
 	to showing static logs or screenshots; an example is when someone describe
 	a problem on IRC. seeing what is being done is sometimes very helpful.
+
+Idea:
+	record a terminal session in text mode
+	replay the session in any terminal
+	use the text cast in help and wizards
+
+Recording
+	parse arguments
+		shots per seconds
+		output directory
+		font
+		terminal size
+
+	verify if the font is monospace
+	create new terminal
+	create ansi codes to color lookup (reversed)
+	#~ take snapshots at regular interval
+		#~ only if the text is different
+		
+	handle change event
+	
+	record selection if any
+	
+	keep 
+		timestamp
+		the terminal size
+
+Post processing:
+	parse arguments
+		location
+			input
+			output
+
+	squash short frames
+
+	compress end result, up to 95% compressio, up to 95% compression
+
+Playing:
+	parse arguments
+		what to play
+		replay speed (interactive too)
+		start at (this could be added during Editing)
+			interesting when used as help or wizard
+		stop at
+		play single image
+
+		display index
+		monochrome display
+
+	set current terminal size and play
+	display cursor at the right position
+
+Editing:
+	possibility to add message
+	possibility to add sound
+	possibility to extend the time an image or a range of images is displayed
+	concatenate text casts (and their indexes)
+	remove portions of a text cast
+	name part of the text cast (shows in the index)
+
+Utilities:
+	convert textcast to screencast
+	convert textcast to telnetcast
+	
 
 Your input is very welcome, this is the right time to do it.
 
@@ -147,7 +211,7 @@ $self->CheckOptionNames($NEW_ARGUMENTS, @setup_data) ;
 
 my $location = "$self->{FILE}:$self->{LINE}" ;
 
-$self->{INTERACTION}{INFO} ||= sub {print @_} ;
+$self->{INTERACTION}{INFO} ||= sub {print @_ or croak "Error: Can't print!"} ;
 $self->{INTERACTION}{WARN} ||= \&Carp::carp ;
 $self->{INTERACTION}{DIE}  ||= \&Carp::confess ;
 
@@ -306,5 +370,9 @@ L<http://search.cpan.org/dist/App-Textcast>
 
 =head1 SEE ALSO
 
+screen
+script
+aewan
+vte
 
 =cut

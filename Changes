@@ -1,0 +1,29 @@
+commit d503d3b35f7dbb1cfff4904ac00e119f461f474c (refs/heads/master)
+Author: nadim khemir <nkh@cpan.org>
+Date:   Sun Feb 8 01:54:46 2009 +0100
+
+    FIXED: Build.pm error
+
+commit 7a32051e81eed2d4a7c080d4b05892e520436435
+Author: nadim khemir <nkh@cpan.org>
+Date:   Sun Feb 8 01:47:02 2009 +0100
+
+    CHANGED: more VT code refactoring
+
+commit 0190dfb7d99c18b45a9cd00414bbb5f45e5756bf
+Author: nadim khemir <nkh@cpan.org>
+Date:   Sun Feb 8 00:41:14 2009 +0100
+
+    CHANGED: refactored VT code
+
+commit 2ee5c83a360f533cd1ba45f12b5efb6223dd283d
+Author: nadim khemir <nkh@cpan.org>
+Date:   Fri Feb 6 15:17:08 2009 +0100
+
+    ADDED: taint mode
+
+commit 0cfc88ef397432ff98535fc5ff29809c143f1f6a
+Author: nadim khemir <nkh@cpan.org>
+Date:   Tue Feb 3 13:09:58 2009 +0100
+
+    ADDED: Initial commit

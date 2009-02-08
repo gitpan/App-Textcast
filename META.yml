@@ -1,6 +1,6 @@
 ---
 name: App-Textcast
-version: 0.01_01
+version: 0.02_01.4
 author:
   - 'Nadim ibn hamouda el Khemir. <nkh@cpan.org>'
 abstract: Light weight text casting
@@ -8,8 +8,16 @@ license: perl
 resources:
   license: http://dev.perl.org/licenses/
 requires:
+  File::Slurp: 0
+  Getopt::Long: 0
+  IO::Handle: 0
+  IO::Pty: 0
+  POSIX: 0
   Readonly: 0
   Sub::Exporter: 0
+  Term::Size: 0.2
+  Term::VT102: 0
+  Time::HiRes: 0
 build_requires:
   Test::Block: 0
   Test::Exception: 0
@@ -19,7 +27,7 @@ build_requires:
 provides:
   App::Textcast:
     file: lib/App/Textcast.pm
-    version: 0.01_01
+    version: 0.02_01
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
