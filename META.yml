@@ -1,6 +1,6 @@
 ---
 name: App-Textcast
-version: 0.02_01.4
+version: 0.04.8
 author:
   - 'Nadim ibn hamouda el Khemir. <nkh@cpan.org>'
 abstract: Light weight text casting
@@ -27,7 +27,7 @@ build_requires:
 provides:
   App::Textcast:
     file: lib/App/Textcast.pm
-    version: 0.02_01
+    version: 0.04
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html

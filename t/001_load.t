@@ -10,16 +10,3 @@ use Test::Exception ;
 
 BEGIN { use_ok( 'App::Textcast' ) or BAIL_OUT("Can't load module"); } ;
 
-my $object = new App::Textcast ;
-
-is(defined $object, 1, 'default constructor') ;
-isa_ok($object, 'App::Textcast');
-
-my $new_config = $object->new() ;
-is(defined $new_config, 1, 'constructed from object') ;
-isa_ok($new_config , 'App::Textcast');
-
-dies_ok
-	{
-	App::Textcast::new () ;
-	} "invalid constructor" ;

@@ -6,6 +6,9 @@ META.yml
 README
 Todo.txt
 
+scripts/play_textcast
+scripts/record_textcast
+
 lib/App/Textcast.pm
 
 t/001_load.t

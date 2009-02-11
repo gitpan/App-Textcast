@@ -168,7 +168,7 @@ my $build = $class->new
 	pm_files     => \%all_modules,
 	autosplit    => \@split_modules,
 	
-	#~ script_files => 'scripts/script.pl',
+	script_files => ['scripts/record_textcast', 'scripts/play_textcast'],
 	dist_author  => 'Nadim ibn hamouda el Khemir. <nkh@cpan.org>',
 	dist_abstract => 'Light weight text casting',
 	);

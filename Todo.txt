@@ -2,24 +2,31 @@
 # This is Todo.txt #
 #------------------#
 
+timing seems weird
+	slow to start
+	delay between frames
+	
+display short frames if their cumul is over a specified threashhold, default 50 fps
+
+handle cursor hidding
+
 restore start state, eg white screens remain dark
 
-opition to display
-	number of frames played and remaining
+handle all the options passed as arguments
+
+option to display
 	percentage played
 	time and time left
 
 show terminal bottom if possible
 
-display information under bottom if possible
-
-pause/play/jump
+pause/play/jump/back/forward
 
 play within a window
 
 index format
     image
     overlay
-    speex
-    choice
-	return to caller
+    speex/mp3
+    interaction 
+	choice
