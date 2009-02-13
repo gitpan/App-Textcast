@@ -1,4 +1,22 @@
-commit d87e21a7ad503b2c2c764c75b1cdbbe502c0e9c9 (refs/heads/master)
+commit 31250a458837cc5d5eb1b69329c08e38271f45ba (refs/heads/master)
+Author: nadim khemir <nkh@cpan.org>
+Date:   Fri Feb 13 11:03:38 2009 +0100
+
+    CHANGED: format of the information displayed to user
+
+commit 2fa43fcc87ef984c86682a2d59fad3fa6a40c202
+Author: nadim khemir <nkh@cpan.org>
+Date:   Fri Feb 13 10:39:57 2009 +0100
+
+    FIXED: initialized variables before using them
+
+commit 3e7138c1bae12240cc60e13035383b1d67eede2e
+Author: nadim khemir <nkh@cpan.org>
+Date:   Fri Feb 13 10:21:49 2009 +0100
+
+    CHANGED: removed extremely short frame handling for smoother replay
+
+commit d87e21a7ad503b2c2c764c75b1cdbbe502c0e9c9
 Author: nadim khemir <nkh@cpan.org>
 Date:   Thu Feb 12 00:31:07 2009 +0100
 

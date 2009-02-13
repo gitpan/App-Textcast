@@ -2,12 +2,6 @@
 # This is Todo.txt #
 #------------------#
 
-timing seems weird
-	slow to start
-	delay between frames
-	
-display short frames if their cumul is over a specified threashhold, default 50 fps
-
 handle cursor hidding
 
 restore start state, eg white screens remain dark

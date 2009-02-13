@@ -44,7 +44,7 @@ use Sub::Exporter -setup =>
 	};
  
 use vars qw ($VERSION);
-$VERSION     = '0.04';
+$VERSION = '0.05';
 }
 
 #-------------------------------------------------------------------------------
@@ -254,8 +254,7 @@ while (not $sub_process_ended)
 	}
 
 my $record_time = tv_interval($start_time, [gettimeofday]);
-printf("Recorded $screenshot_index frames in %.02f seconds\r\n", $record_time) ;
-print ("Textcast is in '$output_directory'.\r\n") unless defined $arguments{OUTPUT_DIRECTORY} ;
+printf("record_textcast: $screenshot_index frames in %.02f seconds. Textcast is in '$output_directory'.\r\n", $record_time) ;
 
 close_vt102_sub_process($vt_process) ;
 
@@ -390,7 +389,7 @@ I<Exceptions>
 my (%arguments) = @_ ;
 
 my $input_directory = $arguments{TEXTCAST_DIRECTORY} or croak 'Error: Expected textcast location!' ;
-my $display_status =  $arguments{DISPLAY_STATUS} ;
+my $display_status =  $arguments{DISPLAY_STATUS} || 0 ;
 
 local $SIG{INT} = sub 
 			{
@@ -401,7 +400,7 @@ local $SIG{INT} = sub
 
 my $screenshot_information = load_index($input_directory) ;
 
-my ($max_rows, $max_columns) ; 
+my ($max_rows, $max_columns) = (-1, -1) ; 
 
 for my $screenshot_data (@{$screenshot_information})
 	{
@@ -430,7 +429,7 @@ else
 
 print $CLEAR, $HOME ;
 
-my ($total_play_time, $played_frames, $skipped_frames, $extremely_short_frames)
+my ($total_play_time, $played_frames, $skipped_frames)
 	= display_text_cast_data
 		(
 		$input_directory,
@@ -442,8 +441,7 @@ my ($total_play_time, $played_frames, $skipped_frames, $extremely_short_frames)
 		}
 		) ;
 	
-my $total_frames = scalar(@{$screenshot_information}) ;
-print_play_information($total_play_time, $total_frames, $played_frames, $skipped_frames, $extremely_short_frames) ;
+print_play_information($total_play_time, $played_frames, $skipped_frames) ;
 
 return ;
 }
@@ -489,8 +487,6 @@ I<Returns> - A list containing
 
 =item * \@skipped_frames
 
-=item * $extremely_short_frames
-
 =back
 
 I<Exceptions> - None
@@ -501,13 +497,10 @@ my ($input_directory, $screenshot_information, $display_status,) = @_ ;
 
 my $total_frames = scalar(@{$screenshot_information}) ;
 
-my ($total_play_time, $played_frames, @skipped_frames, $extremely_short_frames) ;
-
-my ($extremely_short_frames_data, $extremely_short_frames_sleep_time) = ($EMPTY_STRING, 0) ;
+my ($total_play_time, $played_frames, @skipped_frames) ;
 
 my $frame_display_time = 0 ;
 
-SNAPSHOT:
 for my $file_information (@{$screenshot_information})
 	{
 	my $file = "$input_directory/$file_information->{file}" ;
@@ -517,57 +510,27 @@ for my $file_information (@{$screenshot_information})
 		{
 		$played_frames++ ;
 		
-		#todo display short frames if their cumul is over a specified threashhold, default 50 fps
-		Readonly my $EXTREMELY_SHORT_TIME => 0.01 ; # in seconds
+		status
+			(
+			sprintf( "F: $played_frames/$total_frames [%0.2f]", $file_information->{delay}),
+			$display_status->{ROW},
+			$display_status->{COLUMN},
+			) if $display_status->{DISPLAY} ;
 		
-		if ($file_information->{delay} < $EXTREMELY_SHORT_TIME)
-			{
-			# merge extremely short frames together
-
-			$extremely_short_frames++ ;
-			$extremely_short_frames_data .= read_file($file) ;
-			#$extremely_short_frames_data .= $HIDE_CURSOR ;
-			$extremely_short_frames_data .= position_cursor($file_information->{cursor_y}, $file_information->{cursor_x}) ;
-			
-			$extremely_short_frames_sleep_time += $file_information->{delay} ;
-			
-			status
-				(
-				sprintf( "S: $played_frames/$total_frames [%0.2f]", $file_information->{delay}),
-				$display_status->{ROW},
-				$display_status->{COLUMN},
-				) if $display_status->{DISPLAY} ;
-			
-			next SNAPSHOT ;
-			}
-		else
-			{
-			status
-				(
-				sprintf( "F: $played_frames/$total_frames [%0.2f]", $file_information->{delay}),
-				$display_status->{ROW},
-				$display_status->{COLUMN},
-				) if $display_status->{DISPLAY} ;
-			
-			my $sleep_time = ($file_information->{delay} + $extremely_short_frames_sleep_time) - $frame_display_time ;
-			
-			# split sleep time in smaller chunks if we want to handle the user input
-			Readonly my $ONE_MILLION => 1_000_000 ;
-			
-			usleep $sleep_time * $ONE_MILLION if($sleep_time > 0) ;
-			
-			$frame_display_time = [gettimeofday]  ;
-			
-			print #$SHOW_CURSOR,
-				$extremely_short_frames_data,
-				read_file($file),
-				position_cursor($file_information->{cursor_y}, $file_information->{cursor_x}) ;
-			
-			$frame_display_time = tv_interval($frame_display_time , [gettimeofday]) ;
-			
-			$extremely_short_frames_data = $EMPTY_STRING ;
-			$extremely_short_frames_sleep_time = 0 ;
-			}
+		my $sleep_time = $file_information->{delay} - $frame_display_time ;
+		
+		# split sleep time in smaller chunks if we want to handle the user input
+		Readonly my $ONE_MILLION => 1_000_000 ;
+		
+		usleep $sleep_time * $ONE_MILLION if($sleep_time > 0) ;
+		
+		$frame_display_time = [gettimeofday]  ;
+		
+		print #$SHOW_CURSOR,
+			read_file($file),
+			position_cursor($file_information->{cursor_y}, $file_information->{cursor_x}) ;
+		
+		$frame_display_time = tv_interval($frame_display_time , [gettimeofday]) ;
 		}
 	else
 		{
@@ -576,7 +539,7 @@ for my $file_information (@{$screenshot_information})
 		}
 	}
 
-return ($total_play_time, $played_frames, \@skipped_frames, $extremely_short_frames) ;
+return ($total_play_time, $played_frames, \@skipped_frames) ;
 }
 
 #---------------------------------------------------------------------------------------------------------
@@ -584,7 +547,7 @@ return ($total_play_time, $played_frames, \@skipped_frames, $extremely_short_fra
 sub print_play_information
 {
 
-=head2 [p] print_play_information($total_play_time, $total_frames, $played_frames, \@skipped_frames, $extremely_short_frames)
+=head2 [p] print_play_information($total_play_time, $played_frames, \@skipped_frames)
 
 Displays information about the textcast replay.
 
@@ -594,7 +557,6 @@ Displays information about the textcast replay.
 	$total_frames,
 	$played_frames,
 	\@skipped_frames,
-	$extremely_short_frames
 	) ;
 
 I<Arguments>
@@ -603,13 +565,9 @@ I<Arguments>
 
 =item * $total_play_time - Float - play time in seconds
 
-=item * $total_frames - Integer - number of frames in the textcast
-
 =item * $played_frames - Integer - number of framed played, maybe less than $total_frames
 
 =item * \@skipped_frames - Integer - number of frames skipped because they couldn't be found
-
-=item * $extremely_short_frames - Integer - number of extremely short frames
 
 =back
 
@@ -619,22 +577,17 @@ I<Exceptions> - None
 
 =cut
 
-my ($total_play_time, $total_frames, $played_frames, $skipped_frames, $extremely_short_frames) = @_ ;
+my ($total_play_time, $played_frames, $skipped_frames) = @_ ;
 
 my $play_time = sprintf('%0.2f', $total_play_time) ;
 
-print "Played $played_frames of $total_frames frames in $play_time seconds.\n" ;
+print "play_textcast: $played_frames frames played in $play_time seconds.\n" ;
 
 if(@{$skipped_frames})
 	{
 	print "Skipped:\n\t" . join("\n\t", @{$skipped_frames}) . "\n" ;
 	}
 	
-if($extremely_short_frames)
-	{
-	print "Merged $extremely_short_frames extremely short frames!\n" ;
-	}
-
 return ;
 }
 
