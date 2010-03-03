@@ -33,7 +33,6 @@ else
 
 BEGIN 
 {
-use Package::Generator ;
 use Sub::Exporter -setup => 
 	{
 	exports => [ qw(record_textcast play_textcast) ],
@@ -44,7 +43,7 @@ use Sub::Exporter -setup =>
 	};
  
 use vars qw ($VERSION);
-$VERSION = '0.05';
+$VERSION = '0.06';
 }
 
 #-------------------------------------------------------------------------------

@@ -1,4 +1,16 @@
-commit 31250a458837cc5d5eb1b69329c08e38271f45ba (refs/heads/master)
+commit 6ff4a305fdc3f10a0da6a8c297973cd0432363af (HEAD, master)
+Author: nadim khemir <nkh@cpan.org>
+Date:   Wed Mar 3 14:31:25 2010 +0100
+
+    CHANGED: bumped version
+
+commit 1302ba350aaefe2babf0fc1757c45f934932fa7a
+Author: nadim khemir <nkh@cpan.org>
+Date:   Sun Feb 15 13:12:17 2009 +0100
+
+    FIXED: removed dependency on Package::Generator
+
+commit 31250a458837cc5d5eb1b69329c08e38271f45ba
 Author: nadim khemir <nkh@cpan.org>
 Date:   Fri Feb 13 11:03:38 2009 +0100
 
